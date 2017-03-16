@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<style type="text/css">
+	body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+	</style>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=GsBC4iuFEVggxRPArcP1eulEWGFqowqZ"></script>
+	<!--<script type="text/javascript" src="http://api.map.baidu.com/library/RectangleZoom/1.2/src/RectangleZoom_min.js"></script>-->
+	<title>附近的工作</title>
+</head>
+<body>
+	<div id="allmap"></div>
+</body>
+</html>
+<script type="text/javascript">
+	// 百度地图API功能
+	var map = new BMap.Map("allmap");
+	var point = new BMap.Point(118.465317,39.090769);
+	map.centerAndZoom(point, 10);
+	map.enableScrollWheelZoom();   //启用滚轮放大缩小，默认禁用
+	map.enableContinuousZoom();    //启用地图惯性拖拽，默认禁用
+	//var myDrag = new BMapLib.RectangleZoom(map, {
+		//followText: "拖拽鼠标进行操作"
+	//});
+	//myDrag.open();  //开启拉框放大
+	//mp.enableScrollWheelZoom();
+	var marker = new BMap.Marker(point);  // 创建标注
+	map.addOverlay(marker);               // 将标注添加到地图中
+	marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+
+	//1000米的圆形覆盖
+	var circle = new BMap.Circle(point,3000,{fillColor:"lightblue", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+    map.addOverlay(circle);
+
+    function getMapLocation(strWz,callback){
+    	// 创建地址解析器实例
+		var myGeo = new BMap.Geocoder();
+		// 将地址解析结果显示在地图上,并调整地图视野
+		myGeo.getPoint(strWz,callback,"唐山市");
+    }
+
+	// 编写自定义函数,创建标注
+	function addMarker(point,infoWindow){
+	  var marker = new BMap.Marker(point);
+	  map.addOverlay(marker);
+
+	  marker.addEventListener("click", function(){          
+	 	 map.openInfoWindow(infoWindow,point); //开启信息窗口
+	  });
+	}
+
+	function addwindows(strDz_,strGz_,strGs_,strXz_,link_){
+		getMapLocation(strDz_,function(point){
+			if (point) {
+				var sContent ="<ul>"
+							 +"<li>"+strGz_+"</li>"
+							 +"<li>"+strXz_+"</li>"
+							 +"<li>"+strDz_+"</li>"
+							 +"<li><a href=\""+link_+"\">"+strGs_+"</a></li>"
+							 +"</ul>";		
+				var infoWindow = new BMap.InfoWindow(sContent);  // 创建信息窗口对象 	
+				addMarker(point,infoWindow);
+			}else{
+				// alert("您选择地址没有解析到结果!");
+			}
+		})
+	}
+
+addwindows("唐山高新区东方大厦c座1106", "文秘", "河北望远城市规划设计有限公司", "2001-4000","http://company.zhaopin.com/CC302131138.htm");
+addwindows("唐山市路北区卫国路与长虹道交叉口北行200米玛利娅蒙特梭利培训学校", "行政前台", "唐山市路北区玛利娅·蒙特梭利培训学校", "2001-4000","http://company.zhaopin.com/CC285929385.htm");
+addwindows("河北省唐山市路北区龙泽路与龙华道交叉口南行200米路东益民园底商7号", "招聘行政总监一名", "唐山光影广告有限公司", "5000-8000","http://company.zhaopin.com/CC313996685.htm");
+addwindows("河北省唐山市学院路与朝阳道交叉口融通大厦25层", "行政经理", "唐山景泰房地产开发有限公司", "5000-8000","http://company.zhaopin.com/%E5%94%90%E5%B1%B1%E6%99%AF%E6%B3%B0%E6%88%BF%E5%9C%B0%E4%BA%A7%E5%BC%80%E5%8F%91%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8_CC135471235.htm");
+addwindows("河北唐山迁安沙河驿镇上炉村东", "钢铁数据分析员", "河北鑫达钢铁有限公司", "2200-3000","http://company.zhaopin.com/CC352591729.htm");
+addwindows("河北唐山迁安沙河驿镇上炉村东", "文秘助理", "河北鑫达钢铁有限公司", "2001-4000","http://company.zhaopin.com/CC352591729.htm");
+addwindows("唐山路南区新华东道", "行政专员（无责底薪2700+五险+专业培训）", "企业长青教育集团唐山公司", "2001-4000","http://company.zhaopin.com/%E5%94%90%E5%B1%B1%E5%B8%B8%E9%9D%92%E4%BC%81%E4%B8%9A%E7%AE%A1%E7%90%86%E5%92%A8%E8%AF%A2%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8_CC415119415.htm");
+addwindows("唐山市路北区建设路硅谷大厦706", "行政文员五险", "唐山市诺源医疗科技有限公司", "2001-4000","http://company.zhaopin.com/CC483900883.htm");
+addwindows("唐山路南区新华东道", "前台（高档办公环境 高薪可面谈 五险）", "企业长青教育集团唐山公司", "2001-4000","http://company.zhaopin.com/%E5%94%90%E5%B1%B1%E5%B8%B8%E9%9D%92%E4%BC%81%E4%B8%9A%E7%AE%A1%E7%90%86%E5%92%A8%E8%AF%A2%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8_CC415119415.htm");
+addwindows("唐山路南区新华东道", "行政前台 高级职场环境 五险", "企业长青教育集团唐山公司", "4001-6000","http://company.zhaopin.com/%E5%94%90%E5%B1%B1%E5%B8%B8%E9%9D%92%E4%BC%81%E4%B8%9A%E7%AE%A1%E7%90%86%E5%92%A8%E8%AF%A2%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8_CC415119415.htm");
+addwindows("唐山市路北区建设路硅谷大厦706", "经理助理五险提供住宿", "唐山市诺源医疗科技有限公司", "4001-6000","http://company.zhaopin.com/CC483900883.htm");
+addwindows("唐山市路南区新华贸写字楼1702", "文员客服 2500+双奖金+住宿+带薪休假Y", "唐山银海艺术品有限公司", "2500-4000","http://company.zhaopin.com/CC429083988.htm");
+addwindows("唐山市路南区新华西道32号新华贸写字楼1702", "综合行政助理（实习）", "中国民生银行股份有限公司信用卡中心唐山分中心", "1000-2000","http://company.zhaopin.com/CC667630421.htm");
+addwindows("唐山市路南区新华贸写字楼1702", "文员客服Y", "唐山银海艺术品有限公司", "2500-3500","http://company.zhaopin.com/CC429083988.htm");
+addwindows("唐山路北阳光大厦1门 1502", "办公文员", "唐山市路北区北新道沂水泉净水器销售处", "2001-4000","http://company.zhaopin.com/CC433126382.htm");
+addwindows("河北省唐山市路南区万达广场写字楼A座1801室", "前台文员", "大连鼎诺创世实业有限公司唐山分公司", "2001-4000","http://company.zhaopin.com/CC435768534.htm");
+addwindows("河北省唐山市路北区长宁花卉市场东200米", "院长秘书兼办公室主任", "唐山冀东眼科医院有限公司", "4001-6000","http://company.zhaopin.com/CC238356832.htm");
+addwindows("唐山市路南区新华西道32号新华贸写字楼1702", "行政助理", "中国民生银行股份有限公司信用卡中心唐山分中心", "4001-6000","http://company.zhaopin.com/CC667630421.htm");
+addwindows("唐山市路北区文化路23号", "客服专员", "唐山市路北区蒂芬妮婚纱摄影店", "2001-4000","http://company.zhaopin.com/P2/CC3353/1261/CC335312614.htm");
+addwindows("河北省唐山市丰润区林荫东路89号", "人事行政主管（包食宿）", "唐山金箭广告标识有限公司", "2001-4000","http://company.zhaopin.com/CC569921925.htm");
+addwindows("河北唐山迁安沙河驿镇上炉村东", "企管科员", "河北鑫达钢铁有限公司", "2001-4000","http://company.zhaopin.com/CC352591729.htm");
+addwindows("唐山市路北区北新道与卫国路交叉口爱琴海购物公园写字楼A座23层", "行政前台", "唐山天壤房地产开发有限公司", "2000-3000","http://company.zhaopin.com/%E5%94%90%E5%B1%B1%E5%A4%A9%E5%A3%A4%E6%88%BF%E5%9C%B0%E4%BA%A7%E5%BC%80%E5%8F%91%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8_CC293310910.htm");
+addwindows("唐山市开平区洼里镇205国道北侧    双赢集团", "文员（丰南）", "唐山市双赢物流有限公司", "2001-4000","http://company.zhaopin.com/CC330840639.htm");
+addwindows("河北省唐山市路北区机场路7号", "办公室人员", "唐山厚德康复医院", "2001-4000","http://company.zhaopin.com/CC276351484.htm");
+addwindows("河北省唐山市路北区机场路7号", "行政前台", "唐山厚德康复医院", "2001-4000","http://company.zhaopin.com/CC276351484.htm");
+addwindows("唐山市丰润区林荫路东路3号", "餐饮秘书", "唐山丰润昌盛国际酒店有限公司", "2001-4000","http://company.zhaopin.com/CC654796728.htm");
+addwindows("唐山路北阳光大厦1门 1502", "经理秘书", "唐山市路北区北新道沂水泉净水器销售处", "2001-4000","http://company.zhaopin.com/CC433126382.htm");
+addwindows("河北省唐山市路北区长宁道15号", "总经理秘书（水松缘公司）", "河北容大健康管理集团有限公司", "3000-4000","http://company.zhaopin.com/CC436520281.htm");
+addwindows("唐山市路北区新华西道88号", "文秘", "宝升昌控股有限公司", "2001-4000","http://company.zhaopin.com/CC372382138.htm");
+addwindows("唐山市路北区学院路与朝阳道交叉口融通大厦1707-1708室", "研究院主任助理", "格学教育科技(唐山)有限公司", "2001-4000","http://company.zhaopin.com/CC345395031.htm");
+addwindows("河北省唐山市开平区贾庵子工业园区", "经理助理", "河北银水实业集团有限公司", "2001-4000","http://company.zhaopin.com/%E6%B2%B3%E5%8C%97%E9%93%B6%E6%B0%B4%E5%AE%9E%E4%B8%9A%E9%9B%86%E5%9B%A2%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8_CC269516618.htm");
+
+
+//page 2
+
+addwindows("唐山市凤凰世嘉", "办公室文员", "唐山杭奥电梯安装有限公司", "1800-2500","http://company.zhaopin.com/CC702800824.htm");
+addwindows("河北省唐山市路北区学院路祥云道口金融中心B座18层", "上市企业招人事助理", "平安普惠投资咨询有限公司唐山友谊路分公司", "4001-6000","http://company.zhaopin.com/CC334686486.htm");
+addwindows("河北省唐山市路南区胜利路23号", "董事长助理", "唐山贵商实业集团有限公司", "6001-8000","http://company.zhaopin.com/CC330752687.htm");
+addwindows("唐山路北龙富南道264号 ", "行政/后勤/文秘/内勤人员", "唐山海乐家物联贸易有限公司", "2500-3000","http://company.zhaopin.com/CC343742432.htm");
+addwindows("河北省唐山市西山道65号", "董事长秘书", "唐山市人才市场", "6001-8000","http://company.zhaopin.com/P2/CC2218/4511/CC221845110.htm");
+addwindows("河北省唐山市西山道65号", "行政人事经理", "唐山市人才市场", "6000-9000","http://company.zhaopin.com/P2/CC2218/4511/CC221845110.htm");
+addwindows("唐山市路南区韩前街9号", "文员", "中润滨海建设集团有限公司", "2000-3000","http://company.zhaopin.com/CC345443538.htm");
+addwindows("河北省唐山市路南区胜利路23号", "领导秘书", "唐山贵商实业集团有限公司", "2001-4000","http://company.zhaopin.com/CC330752687.htm");
+addwindows("河北省唐山市路南区胜利路23号", "商会秘书", "唐山贵商实业集团有限公司", "2000-3500","http://company.zhaopin.com/CC330752687.htm");
+addwindows("唐山市快乐营教育有限公司", "文员", "唐山市快乐营教育科技有限公司", "2001-4000","http://company.zhaopin.com/CC476994984.htm");
+addwindows("河北省唐山市路南区胜利路23号", "办公室主任", "唐山贵商实业集团有限公司", "2001-4000","http://company.zhaopin.com/CC330752687.htm");
+addwindows("唐山市快乐营教育有限公司", "行政", "唐山市快乐营教育科技有限公司", "2001-4000","http://company.zhaopin.com/CC476994984.htm");
+addwindows("唐山市高新区大庆道与西昌路交叉口创新大厦B座6层", "外联副总裁综合助理", "唐山成联电子商务有限公司", "2001-4000","http://company.zhaopin.com/CC282893586.htm");
+addwindows("唐山路南区南湖金地和顺街98号，成54,61,35,42,12路和泰里下车西行100米", "企业管理人员", "唐山宇龙电子科技有限公司", "4001-6000","http://company.zhaopin.com/CC295694934.htm");
+addwindows("唐山市开平区工业园园区道36号", "行政文员", "河北中名能源科技有限公司", "1000-2000","http://company.zhaopin.com/%E6%B2%B3%E5%8C%97%E4%B8%AD%E5%90%8D%E8%83%BD%E6%BA%90%E7%A7%91%E6%8A%80%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8_CC304204014.htm");
+addwindows("唐山市开平区工业园园区道36号", "综合部经理", "河北中名能源科技有限公司", "3000-5000","http://company.zhaopin.com/%E6%B2%B3%E5%8C%97%E4%B8%AD%E5%90%8D%E8%83%BD%E6%BA%90%E7%A7%91%E6%8A%80%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8_CC304204014.htm");
+addwindows("唐山市开平区工业园园区道36号", "行政专员", "河北中名能源科技有限公司", "2001-4000","http://company.zhaopin.com/%E6%B2%B3%E5%8C%97%E4%B8%AD%E5%90%8D%E8%83%BD%E6%BA%90%E7%A7%91%E6%8A%80%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8_CC304204014.htm");
+addwindows("唐山路南区南湖金地和顺街98号，成54,61,35,42,12路和泰里下车西行100米", "人事行政专员", "唐山宇龙电子科技有限公司", "2001-4000","http://company.zhaopin.com/CC295694934.htm");
+addwindows("唐山路南区南湖金地和顺街98号，成54,61,35,42,12路和泰里下车西行100米", "行政文员助理，行政专员【内勤】", "唐山宇龙电子科技有限公司", "2001-4000","http://company.zhaopin.com/CC295694934.htm");
+addwindows("唐山市路北区北新西道与光明路交口迎宾雅居底商", "人事行政专员", "唐山格沃商贸有限公司", "2001-4000","http://company.zhaopin.com/CC534861623.htm");
+addwindows("河北省唐山市路北区新华西道49号", "董事长司机", "唐山正欣实业集团有限公司", "3000-4000","http://company.zhaopin.com/%E5%94%90%E5%B1%B1%E6%AD%A3%E6%AC%A3%E5%AE%9E%E4%B8%9A%E9%9B%86%E5%9B%A2%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8_CC302304014.htm");
+addwindows("河北省唐山市路北区新华西道49号", "办公室主任", "唐山正欣实业集团有限公司", "3500-5000","http://company.zhaopin.com/%E5%94%90%E5%B1%B1%E6%AD%A3%E6%AC%A3%E5%AE%9E%E4%B8%9A%E9%9B%86%E5%9B%A2%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8_CC302304014.htm");
+addwindows("唐山市路北区福地大厦1611室", "办公室文员", "唐山豪德餐饮管理有限公司", "2001-4000","http://company.zhaopin.com/CC279798636.htm");
+addwindows("唐山市路北区福地大厦1611室", "人力资源经理", "唐山豪德餐饮管理有限公司", "4001-6000","http://company.zhaopin.com/CC279798636.htm");
+addwindows("河北唐山高新区世纪龙庭底商C座", "行政经理", "唐山仁德医疗康复医院有限公司", "4001-6000","http://company.zhaopin.com/CC313645789.htm");
+addwindows("河北唐山路北区大庆道108号", "文员", "河北弘祥送变电工程有限公司", "2000-3000","http://company.zhaopin.com/CC303266330.htm");
+
+//page 3
+
+addwindows("唐山市路北区景泰翰林404-5号", "办公室文员", "唐山朗泽装饰工程有限公司", "2001-4000","http://company.zhaopin.com/CC410602380.htm");
+addwindows("唐山市学院路融通大厦", "经理助理", "唐山市轩亿商贸有限公司", "2001-4000","http://company.zhaopin.com/CC412804587.htm");
+addwindows("唐山市路北区卫国路中段", "体育健身品牌服饰店店长", "唐山派斯商贸有限公司", "2001-4000","http://company.zhaopin.com/CC294070434.htm");
+addwindows(" 唐山市新华西道30号新华贸中心1101室", "办公室文员文案", "唐山菲斯克人力资源服务有限公司", "2001-4000","http://company.zhaopin.com/P3/CC1805/6532/CC180565323.htm");
+addwindows("唐山市路南区丹凤路中段(唐山大剧院)", "团方接待", "唐山市保利大剧院管理有限公司", "2001-4000","http://company.zhaopin.com/CC381203732.htm");
+addwindows(" 唐山市路北区大里路万科金域华府11号商业楼", "行政助理", "唐山联拓广告有限公司", "2001-4000","http://company.zhaopin.com/CC506317124.htm");
+addwindows(" 唐山市路北区大里路万科金域华府11号商业楼", "总经理助理", "唐山联拓广告有限公司", "4001-6000","http://company.zhaopin.com/CC506317124.htm");
+addwindows("河北唐山市路南区纲领国际A座9楼", "助理", "唐山市金华岐工贸有限公司", "2001-4000","http://company.zhaopin.com/CC290847316.htm");
+addwindows("唐山路南新华步行街1栋10号", "文员", "唐山市路南秦虹韩式料理", "2001-4000","http://company.zhaopin.com/CC285295036.htm");
+addwindows("唐山路北区凤凰世嘉605-1-502号", "办公室主任", "唐山润琪市政园林绿化工程有限公司", "4001-6000","http://company.zhaopin.com/CC369664235.htm");
+addwindows("唐山市金融中心", "人事储备部（只招收大学毕业生）", "唐山达跃科技有限公司", "4001-6000","http://company.zhaopin.com/CC311729110.htm");
+addwindows("唐山市路北区学院路与朝阳道交叉口融通大厦1707-1708室", "助理", "格学教育科技(唐山)有限公司", "2001-4000","http://company.zhaopin.com/CC345395031.htm");
+addwindows("唐山路北阳光大厦1门 1502", "经理助理", "唐山市路北区北新道沂水泉净水器销售处", "2001-4000","http://company.zhaopin.com/CC433126382.htm");
+
+
+    // 随机向地图添加25个标注
+	//var bounds = map.getBounds();
+	//var sw = bounds.getSouthWest();
+	//var ne = bounds.getNorthEast();
+	//var lngSpan = Math.abs(sw.lng - ne.lng);
+	//var latSpan = Math.abs(ne.lat - sw.lat);
+	//for (var i = 0; i < 25; i ++) {
+	//	var point = new BMap.Point(sw.lng + lngSpan * (Math.random() * 0.7), ne.lat - latSpan * (Math.random() * 0.7));
+
+	//		var sContent ="<ul>"
+	//					 +"<li>工作</li>"
+	//					 +"<li>薪资</li>"
+	//					 +"<li>地点</li>"
+	//					 +"<li><a href=\"https://www.baidu.com/\">公司名称</a></li>"
+	//					 +"</ul>";
+	//
+	//  	var infoWindow = new BMap.InfoWindow(sContent);  // 创建信息窗口对象 
+
+	//	addMarker(point,infoWindow);
+	//}
+
+
+	//两点距离
+	//var pointA = new BMap.Point(106.486654,29.490295);  // 创建点坐标A--大渡口区
+	//var pointB = new BMap.Point(106.581515,29.615467);  // 创建点坐标B--江北区
+	//alert('从大渡口区到江北区的距离是：'+(map.getDistance(pointA,pointB)).toFixed(2)+' 米。');  //获取两点距离,保留小数点后两位
+
+
+</script>
